@@ -4,10 +4,12 @@
   "description": "Clean up user-submitted HTML, preserving whitelisted elements and whitelisted attributes on a per-element basis",
   "main": "index.js",
   "scripts": {
-    "build": "browserify index.js -o dist/sanitize-html.js -t [ babelify --presets [ env ] ] --standalone 'sanitizeHtml'",
-    "minify": "npm run build && uglifyjs dist/sanitize-html.js > dist/sanitize-html.min.js",
-    "test": "mocha test/test.js",
-    "prebuild": "npm run test && rm -rf dist && mkdir dist"
+    "browserify-es5": "browserify index.js -o dist/sanitize-html-es5.js -t [ babelify --presets [ env ] ] --standalone 'sanitizeHtml' && uglifyjs dist/sanitize-html-es5.js > dist/sanitize-html-es5.min.js",
+    "browserify": "browserify index.js -o dist/sanitize-html.js --standalone 'sanitizeHtml' && uglifyjs dist/sanitize-html.js > dist/sanitize-html.min.js",
+    "clean": "rm dist/sanitize-html.js && rm dist/sanitize-html-es5.js",
+    "build": "npm run test",
+    "prepublishOnly": "npm run test && rm -rf dist && mkdir dist && npm run browserify-es5 && npm run browserify && npm run clean",
+    "test": "mocha test/test.js"
   },
   "repository": {
     "type": "git",
